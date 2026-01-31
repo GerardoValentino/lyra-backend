@@ -2,7 +2,7 @@ from fastapi import BackgroundTasks
 import uuid
 from app.schemas import SongAnalyticsRequest
 from app.api.v1.jobs import analysis_jobs
-from .analysis_tasks import run_song_analysis
+from .analysis_tasks_service import run_song_analysis
 
 def create_song_analysis_job(
     request_data: SongAnalyticsRequest,

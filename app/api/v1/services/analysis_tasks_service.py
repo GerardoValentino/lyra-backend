@@ -1,6 +1,6 @@
 from app.api.v1.jobs import analysis_jobs
 from app.schemas import SongAnalyticsRequest
-from .llm_logic_service import analyze_song_lyrics
+from .llm_service import analyze_song_lyrics
 
 async def run_song_analysis(
     job_id: str,
