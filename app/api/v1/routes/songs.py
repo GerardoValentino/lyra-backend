@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Query, HTTPException, status
 from starlette import status
 from typing import Annotated
-from app.schemas.song import SongRequest, SongAnalyticsRequest
+from app.schemas import SongRequest, SongAnalyticsRequest
 from dotenv import load_dotenv
 import os
 import httpx
