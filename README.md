@@ -41,4 +41,16 @@ El flujo seria el siguiente:
 La ventaja de esto es que no hay polling y se obtiene una respuesta en tiempo real
 con un backend más eficiente.
 
+En este proyecto, los jobs se almacenan en memoria, por ejemplo:
+
+analysis_jobs = {
+    "job_id": {
+        "status": "processing | done | failed",
+        "result": {...} | None,
+        "error": str | None
+    }
+}
+
+Este enfoque no es adecuado para producción, en tal caso se deben almacenar en bases de datos o en algun sistema de colas.
+
 
