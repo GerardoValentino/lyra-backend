@@ -1,22 +1,29 @@
-import httpx
+from fastapi import BackgroundTasks
+import uuid
+from app.schemas import SongAnalyticsRequest
+from app.api.v1.jobs import analysis_jobs
+from .analysis_tasks import run_song_analysis
 
-async def analyze_song_lyrics(
-    message: str,
-    lyrics: str,
-    api_key: str
+def create_song_analysis_job(
+    request_data: SongAnalyticsRequest,
+    api_key: str,
+    background_tasks: BackgroundTasks
 ) -> dict:
-    url = "https://apifreellm.com/api/v1/chat"
+    job_id = str(uuid.uuid4())
 
-    prompt = f"{message}\n\nLyrics:\n{lyrics}"
-
-    headers = {
-        "Authorization": f"Bearer {api_key}",
-        "Content-Type": "application/json"
+    analysis_jobs[job_id] = {
+        "status": "processing"
     }
 
-    payload = {"message": prompt}
+    background_tasks.add_task(
+        run_song_analysis,
+        job_id,
+        request_data,
+        api_key
+    )
 
-    async with httpx.AsyncClient(timeout=90.0) as client:
-        response = await client.post(url, json=payload, headers=headers)
-        response.raise_for_status()
-        return response.json()
+    return {
+        "job_id": job_id,
+        "status": "processing"
+    }
+
