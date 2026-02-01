@@ -1,6 +1,5 @@
 from fastapi import APIRouter
-from app.api.v1.routes import songs
-from app.api.v1.routes import jobs
+from app.api.v1.routes import songs, jobs
 
 api_router = APIRouter()
 

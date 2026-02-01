@@ -60,7 +60,7 @@ Otra solución más robusta puede ser la siguiente:
 Con esto el backend no bloquea workers, el servidor no se “cansa” esperando la respuesta y la experiencia de usuario es mejor.
 Pero esto requiere múltiples peticiones HTTP y el frontend debe manejar polling y estados intermedios.
 
-La solución más eficiente es usar WebSockets para este caso de uso.
+Una solución más eficiente es usar WebSockets para este caso de uso.
 El flujo seria el siguiente:
 
 1. El frontend inicia el análisis (POST /analysis) y obtiene un job_id.
