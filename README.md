@@ -2,6 +2,36 @@
 Backend API para el análisis semántico de canciones mediante IA. Construido con FastAPI, utiliza LRCLIB para la obtención de letras y APIFreeLLM para el procesamiento de lenguaje natural y extracción de insights.
 
 
+# Instrucciones para la instalación y ejecución de este proyecto
+
+Requisitos:
+- Tener instalado Python 3.10 o superior
+- pip
+- git
+
+Configuración del Backend:
+1. Crear y activar el entorno virtual
+    - python3 -m venv venv
+    
+    (Para Linux / macOS)
+    - source venv/bin/activate
+
+    (Para Windows) 
+    - venv\Scripts\activate
+
+2. Instalar dependencias
+    - pip install -r requirements.txt
+
+3. Crear un archivo .env en la raiz del proyecto que contenga:
+    API_KEY=tu_api_key
+
+    Esta API_KEY es necesaria para consumir la API externa de IA utilizada para el análisis de canciones
+
+4. Ejecutar el servidor FastAPI
+    - uvicorn app.main:app --reload
+
+
+
 # Desiciones técnicas
 
 Problematica: Análisis de canciones con IA (LLM)
