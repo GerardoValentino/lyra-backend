@@ -19,7 +19,7 @@ router = APIRouter(
     tags=["songs"]
 )
 
-@router.get("/lyrics", status_code=status.HTTP_200_OK)
+@router.get("/lyrics")
 async def get_song_lyrics(params: Annotated[SongRequest, Query()]):
     lyrics = await fetch_song_lyrics(
         artist=params.artist,
@@ -27,7 +27,7 @@ async def get_song_lyrics(params: Annotated[SongRequest, Query()]):
     )
 
     return success_response(
-        data=lyrics,
+        data=lyrics, 
         message="Letra obtenida correctamente"
     )
 

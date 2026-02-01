@@ -1,11 +1,8 @@
 import httpx
-from fastapi import HTTPException
+from app.exceptions import LyricsNotFoundError, LyricsServiceUnavailable
 
 async def fetch_song_lyrics(artist: str, song_name: str) -> dict:
-    url = (
-        "https://lrclib.net/api/get"
-        f"?artist_name={artist}&track_name={song_name}"
-    )
+    url = f"https://lrclib.net/api/get?artist_name={artist}&track_name={song_name}"
 
     async with httpx.AsyncClient(timeout=10.0) as client:
         try:
@@ -14,15 +11,11 @@ async def fetch_song_lyrics(artist: str, song_name: str) -> dict:
             return response.json()
         
         except httpx.HTTPStatusError as e:
-            # Error esperado (404, 400, etc.)
-            raise HTTPException(
-                status_code=404,
-                detail="No se encontró la letra de la canción"
-            )
+            if e.response.status_code == 404:
+                raise LyricsNotFoundError("No se encontró la letra de esta canción", e)
+            # Para otros errores de estado (400, 500, etc.)
+            raise LyricsServiceUnavailable("El servicio de letras externo falló", e)
 
-        except httpx.RequestError:
-            # Error de red / timeout
-            raise HTTPException(
-                status_code=503,
-                detail="Servicio de letras no disponible"
-            )
+        except httpx.RequestError as e:
+            # Errores de conexión, DNS o timeouts
+            raise LyricsServiceUnavailable("No se pudo conectar con el servicio de letras", e)
