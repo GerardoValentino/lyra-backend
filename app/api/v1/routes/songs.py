@@ -1,17 +1,18 @@
 from fastapi import (
     APIRouter, 
-    Query,
+    Query, 
+    HTTPException, 
     status, 
-    BackgroundTasks,
     Depends
 )
 
 from typing import Annotated
-from app.utils.responses import success_response
+import httpx
 from app.schemas import SongRequest, SongAnalyticsRequest
 from app.api.v1.services import fetch_song_lyrics
+from app.api.v1.services import analyze_song_lyrics
 from app.api.v1.dependencies import get_api_key
-from app.api.v1.services import create_song_analysis_job
+from app.utils.responses import success_response
 
 router = APIRouter(
     prefix="/songs",
@@ -31,14 +32,16 @@ async def get_song_lyrics(params: Annotated[SongRequest, Query()]):
     )
 
 @router.post("/analysis", status_code=status.HTTP_202_ACCEPTED)
-async def analyze_song(
-    request_data: SongAnalyticsRequest,
-    background_tasks: BackgroundTasks,
-    api_key: str = Depends(get_api_key)
-):
-    return create_song_analysis_job(
-        request_data=request_data,
-        api_key=api_key,
-        background_tasks=background_tasks
-    )
+async def analyze_song(request_data: SongAnalyticsRequest, api_key: str = Depends(get_api_key)):
+    try:
+        return await analyze_song_lyrics(
+            message=request_data.message,
+            lyrics=request_data.song_lyrics,
+            api_key=api_key
+        )
+    except httpx.HTTPStatusError as e:
+        raise HTTPException(
+            status_code=e.response.status_code,
+            detail=f"Ocurrio un problema al analizar la canción con IA: {e.response.text}"
+        )
 

@@ -16,14 +16,7 @@ async def analyze_song_lyrics(
 
     payload = {"message": prompt}
 
-    timeout = httpx.Timeout(
-        connect=5.0,
-        read=30.0,
-        write=10.0,
-        pool=5.0
-    )
-
-    async with httpx.AsyncClient(timeout=timeout) as client:
+    async with httpx.AsyncClient(timeout=90.0) as client:
         response = await client.post(url, json=payload, headers=headers)
         response.raise_for_status()
         return response.json()

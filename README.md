@@ -71,7 +71,7 @@ El flujo seria el siguiente:
 La ventaja de esto es que no hay polling y se obtiene una respuesta en tiempo real
 con un backend más eficiente.
 
-En este proyecto, los jobs se almacenan en memoria, por ejemplo:
+En este proyecto, para el enfoque que estamos manejando, los jobs se almacenarian de esta manera:
 
 analysis_jobs = {
     "job_id": {
@@ -81,6 +81,9 @@ analysis_jobs = {
     }
 }
 
-Este enfoque no es adecuado para producción, en tal caso se deben almacenar en bases de datos o en algun sistema de colas.
+Para que esto sea adecuado para produccion, los jobs se deben almacenar en bases de datos o en algun sistema de colas.
+
+Pero por simplicidad, para una aplicación sencilla como esta, donde no tendra uso intensivo, se usara la primera opción, donde extendemos el tiempo de espera de la API para recibir la respuesta del LLM. Se omitirán intencionalmente los jobs en el background y websockets.
+
 
 
