@@ -37,6 +37,13 @@ En la raíz del proyecto:
 
     Ejemplo: http://127.0.0.1:8000/docs
 
+Nota: En caso de tener problemas de cross origin, modificar esta variable en main.py
+
+origins = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+]
+
 # Desiciones técnicas
 
 Dónde escribir el prompt:
