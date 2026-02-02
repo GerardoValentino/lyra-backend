@@ -5,20 +5,48 @@ from app.exceptions import (
 )
 
 async def analyze_song_lyrics(
-    message: str,
     lyrics: str,
     api_key: str
 ) -> dict:
     url = "https://apifreellm.com/api/v1/chat"
 
-    prompt = f"{message}\n\nLyrics:\n{lyrics}"
+    message = """
+    Analiza la siguiente canción y haz el siguiente análisis:
+    Clasificala en una de las siguientes categorias:
+        1. Amor
+        2. Desamor
+        3. Muerte
+        4. Crítica social
+        5. Crítica política
+        6. Religión
+        7. Experiencia personal
+        8. Otro
+
+    Redacta un breve resumen del contenido de la canción.
+    Haz interpretación del significado de la canción, especialmente en los casos en los que:
+        1. Existan metáforas
+        2. El mensaje no sea literal
+        3. El significado requiera un análisis más profundo
+
+    Indica si la canción es cantada desde la perspectiva de:
+        Una persona de género masculino
+        Una persona de género femenino
+        Indeterminado (No es posible inferirlo claramente)
+
+    Si existe, extrae una lista de:
+        Nombres de empresas
+        Marcas
+        Productos comerciales
+    """
+
+    prompt = f"{message}\n\Aquí esta la letra:\n{lyrics}"
 
     headers = {
         "Authorization": f"Bearer {api_key}",
         "Content-Type": "application/json"
     }
 
-    payload = {"message": prompt}
+    payload = {"message": prompt }
 
     async with httpx.AsyncClient(timeout=90.0) as client:
         try:

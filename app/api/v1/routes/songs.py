@@ -34,7 +34,7 @@ async def analyze_song(
     api_key: str = Depends(get_api_key)
 ):
     response = await analyze_song_lyrics(
-        message=request_data.message,
+        #message=request_data.message,
         lyrics=request_data.song_lyrics,
         api_key=api_key
     )
