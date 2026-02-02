@@ -10,6 +10,8 @@ Requisitos:
 - git
 
 Configuración del Backend:
+En la raíz del proyecto:
+
 1. Crear y activar el entorno virtual
     - python3 -m venv venv
     
@@ -25,12 +27,15 @@ Configuración del Backend:
 3. Crear un archivo .env en la raiz del proyecto que contenga:
     API_KEY=tu_api_key
 
-    Esta API_KEY es necesaria para consumir la API externa de IA utilizada para el análisis de canciones
+    Esta API_KEY es necesaria para consumir la API externa de IA (APIFreeLLM) utilizada para el análisis de canciones
 
 4. Ejecutar el servidor FastAPI
     - uvicorn app.main:app --reload
 
+5. Para ver la documentacion en Swagger UI nativa de FastAPI, ir a:
+    http://<la_url>/docs
 
+    Ejemplo: http://127.0.0.1:8000/docs
 
 # Desiciones técnicas
 
@@ -71,7 +76,7 @@ El flujo seria el siguiente:
 La ventaja de esto es que no hay polling y se obtiene una respuesta en tiempo real
 con un backend más eficiente.
 
-En este proyecto, para el enfoque que estamos manejando, los jobs se almacenarian de esta manera:
+En este proyecto, para el enfoque que estamos manejando, los jobs se almacenarian de esta manera, por ejemplo:
 
 analysis_jobs = {
     "job_id": {
@@ -83,7 +88,35 @@ analysis_jobs = {
 
 Para que esto sea adecuado para produccion, los jobs se deben almacenar en bases de datos o en algun sistema de colas.
 
-Pero por simplicidad, para una aplicación sencilla como esta, donde no tendra uso intensivo, se usara la primera opción, donde extendemos el tiempo de espera de la API para recibir la respuesta del LLM. Se omitirán intencionalmente los jobs en el background y websockets.
+Pero por simplicidad, para una aplicación sencilla como esta, donde no tendra uso intensivo, se usará la primera opción, donde extendemos el tiempo de espera de la API para recibir la respuesta del LLM. Se omitirán intencionalmente los jobs en el background y websockets.
 
 
+# Arquitectura del proyecto
+
+La estructura general del proyecto es la siguiente:
+
+app/
+├── api/
+│   └── v1/
+│       ├── routes/
+│       ├── services/
+│       ├── dependencies.py
+│       └── router.py
+├── schemas/
+├── utils/
+├── exceptions.py
+├── main.py
+
+Con esta arquitectura se separan responsabilidades de una mejor manera.
+
+El flujo general de una petición es la siguiente:
+
+1. El cliente llama a un endpoint (routes)
+2. El endpoint valida la entrada (schemas)
+3. El endpoint delega la lógica al service
+4. El service ejecuta la lógica o llamadas externas
+5. El endpoint traduce el resultado a una respuesta HTTP estándar
+
+
+Aunque esta aplicación es pequeña y está pensada para pruebas, se decidió usar esta arquitectura desde el inicio para facilitar futuras extensiones.
 

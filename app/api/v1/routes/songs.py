@@ -7,8 +7,7 @@ from fastapi import (
 
 from typing import Annotated
 from app.schemas import SongRequest, SongAnalyticsRequest
-from app.api.v1.services import fetch_song_lyrics
-from app.api.v1.services import analyze_song_lyrics
+from app.api.v1.services import fetch_song_lyrics, analyze_song_lyrics
 from app.api.v1.dependencies import get_api_key
 from app.utils.responses import success_response
 
