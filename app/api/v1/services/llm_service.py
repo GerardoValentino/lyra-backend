@@ -37,6 +37,16 @@ async def analyze_song_lyrics(
         Nombres de empresas
         Marcas
         Productos comerciales
+    
+    RESPONDE ÚNICAMENTE EN FORMATO JSON. No incluyas introducciones ni notas al pie. 
+    Sigue esta estructura:
+    {
+    "categoria": "...",
+    "resumen": "...",
+    "interpretacion": "...",
+    "perspectiva": "...",
+    "entidades": []
+    }
     """
 
     prompt = f"{message}\n\Aquí esta la letra:\n{lyrics}"
