@@ -128,3 +128,55 @@ El flujo general de una petición es la siguiente:
 
 Aunque esta aplicación es pequeña y está pensada para pruebas, se decidió usar esta arquitectura desde el inicio para facilitar futuras extensiones.
 
+# Endpoints
+La API está organizada bajo la versión v1 y estructurada para una integración sencilla con aplicaciones de frontend.
+
+1. Obtener letra de canción
+Busca y retorna la letra plana de una canción específica.
+
+URL: /api/v1/songs/lyrics
+Método: GET
+
+Parámetros de consulta (Query Params):
+
+Parámetro   Tipo    Obligatorio     Descripción
+--------------------------------------------------------------
+song_name	string	    Sí	    Nombre de la canción a buscar.
+artist	    string	    Sí	    Nombre del artista o banda.
+
+Ejemplo de respuesta:
+
+{
+    "success": true,
+    "message": "Letra obtenida correctamente",
+    "data": {
+        "id": 190929,
+        "name": "Chiquitita",
+        "trackName": "Chiquitita",
+        "artistName": "ABBA",
+        ...
+    }
+}
+
+2. Análisis de letra con IA
+Procesa la letra de una canción para generar un análisis profundo utilizando modelos de lenguaje (LLM).
+
+URL: /api/v1/songs/analysis
+Método: POST
+
+Cuerpo de la petición (Request Body): 
+{
+  "song_lyrics": "string (contenido de la letra)"
+}
+
+Este endpoint utiliza un System Prompt almacenado en el servidor para garantizar la consistencia del análisis y proteger la lógica de las instrucciones. El análisis incluye clasificación por categorías, interpretación de metáforas y detección de entidades comerciales.
+
+Ejemplo de respuesta:
+{
+  "success": true,
+  "data": {
+    "categoria": "Desamor",
+    "resumen": "La canción describe la ruptura...",
+    "perspectiva": "Masculino"
+  }
+}
