@@ -39,6 +39,14 @@ En la raíz del proyecto:
 
 # Desiciones técnicas
 
+Dónde escribir el prompt:
+En este caso se considero agregar el "Prompt" directamente en el backend, ya que enviarlo desde el frontend se corren riesgos de seguridad, por ejemplo:
+
+Al mantener el prompt en el frontend, cualquier usuario con conocimientos básicos de la consola del navegador podría ver las instrucciones exactas enviadas a la IA. Moverlo al backend oculta la lógica de negocio y evita que usuarios malintencionados manipulen las instrucciones para obtener respuestas no deseadas o consumir créditos de la API de forma indebida.
+
+Además, enviar la letra de la canción + un prompt extenso desde el navegador aumenta innecesariamente el tamaño de la petición HTTP. Al mover el prompt al backend, el frontend solo envía la información mínima necesaria (la letra), dejando que el servidor ensamble la petición completa hacia el proveedor de IA.
+
+
 Problematica: Análisis de canciones con IA (LLM)
 
 El endpoint encargado de analizar la letra de una canción usando una API externa de IA (LLM) presenta un problema con el tiempo de respuesta.
